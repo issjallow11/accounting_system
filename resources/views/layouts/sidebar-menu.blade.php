@@ -74,7 +74,7 @@
 
 
 
-      {{-- @can('isAdmin')
+       @can('isAdmin')
       <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-cog green"></i>
@@ -113,7 +113,7 @@
         </ul>
       </li>
 
-      @endcan --}}
+      @endcan
 
 
 

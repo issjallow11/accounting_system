@@ -5,6 +5,8 @@ export default [
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/products', component: require('./components/product/Products.vue').default },
     { path: '/accounts', component: require('./components/Accounts/Accounts.vue').default },
+    { path: '/subAccounts', component: require('./components/Accounts/SubAccount.vue').default },
+    { path: '/transactions', component: require('./components/transactions/Transaction.vue').default },
     { path: '/product/tag', component: require('./components/product/Tag.vue').default },
     { path: '/product/category', component: require('./components/product/Category.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }

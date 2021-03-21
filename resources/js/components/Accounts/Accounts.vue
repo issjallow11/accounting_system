@@ -69,8 +69,8 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode">Create New User</h5>
-                    <h5 class="modal-title" v-show="editmode">Update User's Info</h5>
+                    <h5 class="modal-title" v-show="!editmode">Create New Account</h5>
+                    <h5 class="modal-title" v-show="editmode">Update Account</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -86,12 +86,7 @@
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
-                        <div class="form-group">
-                            <label>Amount</label>
-                            <input v-model="form.amount" type="number" name="amount"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
-                            <has-error :form="form" field="email"></has-error>
-                        </div>
+                       
 
                         <!-- <div class="form-group">
                             <label>Password</label>
@@ -132,7 +127,7 @@
                 form: new Form({
                     id : '',
                     name: '',
-                    amount: '',
+
 
                 })
             }

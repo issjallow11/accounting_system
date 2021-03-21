@@ -18,14 +18,22 @@
         </router-link>
       </li> --}}
       <li class="nav-item">
+        <router-link to="/transactions" class="nav-link">
+          <i class="nav-icon fas fa-list orange"></i>
+          <p>
+            Transactions
+          </p>
+        </router-link>
+      </li>
+      {{-- <li class="nav-item">
         <router-link to="/accounts" class="nav-link">
           <i class="nav-icon fas fa-list orange"></i>
           <p>
             Accounts
           </p>
         </router-link>
-      </li>
-      {{-- <li class="nav-item has-treeview">
+      </li> --}}
+      <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-cog green"></i>
           <p>
@@ -35,16 +43,16 @@
         </a>
         <ul class="nav nav-treeview">
 
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <router-link to="/product/category" class="nav-link">
               <i class="nav-icon fas fa-list-ol green"></i>
               <p>
                 Chart of Account
               </p>
             </router-link>
-          </li>
+          </li> --}}
           <li class="nav-item">
-            <router-link to="/product/tag" class="nav-link">
+            <router-link to="/accounts" class="nav-link">
               <i class="nav-icon fas fa-tags green"></i>
               <p>
                 Main Account
@@ -53,7 +61,7 @@
           </li>
 
             <li class="nav-item">
-              <router-link to="/developer" class="nav-link">
+              <router-link to="/subAccounts" class="nav-link">
                   <i class="nav-icon fas fa-cogs white"></i>
                   <p>
                       Sub Accounts
@@ -61,7 +69,7 @@
               </router-link>
             </li>
         </ul>
-      </li> --}}
+      </li>
 
       @can('isAdmin')
         <li class="nav-item">

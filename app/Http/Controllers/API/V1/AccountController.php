@@ -26,10 +26,7 @@ class AccountController extends Controller
 
         $accounts = Account::latest()->paginate(10);
 
-        // return $this->sendResponse($accounts, 'Users list');
-        // return response()->json([
-        //     'message' => ' accounts list'
-        // ]);
+
         return $accounts;
     }
 
@@ -43,7 +40,7 @@ class AccountController extends Controller
     {
         $account = Account::create([
             'name' => $request['name'],
-            'amount' => $request['amount'],
+            
 
         ]);
 
@@ -73,7 +70,10 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $account = Account::findOrFail($id);
+        $account->update($request->all());
+        return $account;
+
     }
 
     /**
@@ -84,6 +84,13 @@ class AccountController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+
+        $account = Account::findOrFail($id);
+        // delete the user
+
+        $account->delete();
+
+        return $account;
     }
 }

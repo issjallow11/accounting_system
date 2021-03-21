@@ -40,6 +40,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'category' => 'CategoryController',
         'tag' => 'TagController',
         'account' => 'AccountController',
-        
+        'subAccount' => 'SubAccountController',
+
     ]);
 });

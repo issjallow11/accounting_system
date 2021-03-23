@@ -7,7 +7,7 @@
 
             <div class="card" v-if="$gate.isAdmin()">
               <div class="card-header">
-                <h3 class="card-title">List of Transactions</h3>
+                <h3 class="card-title">Debit list</h3>
 
                 <div class="card-tools">
 
@@ -23,21 +23,23 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Date</th>
-                      <th>Main Account</th>
-                      <th>Sub Account</th>
-                      <th>Amount</th>
-                      <th>Description</th>
+                      <th>Type</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Email Verified?</th>
+                      <th>Created</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="account in accounts.data" :key="account.id">
+                     <tr v-for="user in users.data" :key="user.id">
 
-                      <td>{{account.id}}</td>
-                      <td class="text-capitalize">{{account.name}}</td>
-                      <td>{{account.amount}}</td>
-                      <td>{{account.created_at}}</td>
+                      <td>{{user.id}}</td>
+                      <td class="text-capitalize">{{user.type}}</td>
+                      <td class="text-capitalize">{{user.name}}</td>
+                      <td>{{user.email}}</td>
+                      <td :inner-html.prop="user.email_verified_at | yesno"></td>
+                      <td>{{user.created_at}}</td>
 
                       <td>
 
@@ -45,7 +47,7 @@
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteAccount(account.id)">
+                        <a href="#" @click="deleteUser(user.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
                       </td>
@@ -55,7 +57,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="accounts" @pagination-change-page="getResults"></pagination>
+                  <pagination :data="users" @pagination-change-page="getResults"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -81,7 +83,7 @@
 
                 <!-- <form @submit.prevent="createUser"> -->
 
-                <form @submit.prevent="editmode ? updateAccount() : createAccount()">
+                <form @submit.prevent="editmode ? updateUser() : createUser()">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Name</label>
@@ -90,20 +92,20 @@
                             <has-error :form="form" field="name"></has-error>
                         </div>
                         <div class="form-group">
-                            <label>Amount</label>
-                            <input v-model="form.amount" type="number" name="amount"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
+                            <label>Email</label>
+                            <input v-model="form.email" type="text" name="email"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                             <has-error :form="form" field="email"></has-error>
                         </div>
 
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label>Password</label>
                             <input v-model="form.password" type="password" name="password"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" autocomplete="false">
                             <has-error :form="form" field="password"></has-error>
-                        </div> -->
+                        </div>
 
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label>User Role</label>
                             <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                                 <option value="">Select User Role</option>
@@ -111,7 +113,7 @@
                                 <option value="user">Standard User</option>
                             </select>
                             <has-error :form="form" field="type"></has-error>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -131,12 +133,14 @@
         data () {
             return {
                 editmode: false,
-                accounts : {},
+                users : {},
                 form: new Form({
                     id : '',
+                    type : '',
                     name: '',
-                    amount: '',
-
+                    email: '',
+                    password: '',
+                    email_verified_at: '',
                 })
             }
         },
@@ -146,14 +150,14 @@
 
                   this.$Progress.start();
 
-                  axios.get('api/account?page=' + page)
-                  .then(({ data }) => (this.accounts = data.data));
+                  axios.get('api/user?page=' + page).then(({ data }) => (this.users = data.data));
+
                   this.$Progress.finish();
             },
-            updateAccount(){
+            updateUser(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('api/account/'+this.form.id)
+                this.form.put('api/user/'+this.form.id)
                 .then((response) => {
                     // success
                     $('#addNew').modal('hide');
@@ -164,7 +168,7 @@
                     this.$Progress.finish();
                         //  Fire.$emit('AfterCreate');
 
-                    this.loadAccount();
+                    this.loadUsers();
                 })
                 .catch(() => {
                     this.$Progress.fail();
@@ -182,7 +186,7 @@
                 this.form.reset();
                 $('#addNew').modal('show');
             },
-            deleteAccount(id){
+            deleteUser(id){
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -194,34 +198,33 @@
 
                         // Send request to the server
                          if (result.value) {
-                                this.form.delete('api/account/'+id).then(()=>{
+                                this.form.delete('api/user/'+id).then(()=>{
                                         Swal.fire(
                                         'Deleted!',
-                                        'Account has been deleted.',
+                                        'Your file has been deleted.',
                                         'success'
                                         );
                                     // Fire.$emit('AfterCreate');
-                                    this.loadAccount();
+                                    this.loadUsers();
                                 }).catch((data)=> {
                                   Swal.fire("Failed!", data.message, "warning");
                               });
                          }
                     })
             },
-          loadAccount(){
+          loadUsers(){
             this.$Progress.start();
 
             if(this.$gate.isAdmin()){
-              axios.get("api/account").then(({ data }) => (this.accounts = data));
-
+              axios.get("api/user").then(({ data }) => (this.users = data.data));
             }
 
             this.$Progress.finish();
           },
 
-          createAccount(){
+          createUser(){
 
-              this.form.post('api/account')
+              this.form.post('api/user')
               .then((response)=>{
                   $('#addNew').modal('hide');
 
@@ -231,7 +234,7 @@
                   });
 
                   this.$Progress.finish();
-                  this.loadAccount();
+                  this.loadUsers();
 
               })
               .catch(()=>{
@@ -245,12 +248,12 @@
 
         },
         mounted() {
-            console.log('Account Component mounted.')
+            console.log('User Component mounted.')
         },
         created() {
 
             this.$Progress.start();
-            this.loadAccount();
+            this.loadUsers();
             this.$Progress.finish();
         }
     }

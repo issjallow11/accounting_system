@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
+use App\Models\Account;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class TransactionController extends BaseController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +20,16 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        if (!\Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+        // $this->authorize('isAdmin');
+
+        $credits = Transaction::latest()->paginate(10);
+
+        return $this->sendResponse($credits, 'Transaction list');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -25,7 +39,22 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $credit = Transaction::create([
+            'date' => $request['date'],
+            'receipt_no' => $request['receipt_no'],
+            'customer_name' => $request['customer_name'],
+            'payment' => $request['payment'],
+            'payment_date' => $request['payment_date'],
+
+        ]);
+        // $payment = Transaction:: find('payment');
+        // $account = Account::find('amount');
+        // $amount = $account->amount + $payment;
+        $accountUpdate = Account::find($id)->amount;
+        dd($accountUpdate);
+        $accountUpdate->amount = $accountUpdate->$amount + $credit->payment;
+
+        return $this->sendResponse($credit, 'Account Credited Successfully');
     }
 
     /**
@@ -59,6 +88,13 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+
+        $credit = Transaction::findOrFail($id);
+        // delete the user
+
+        $credit->delete();
+
+        return $this->sendResponse([$credit], 'Transaction successfully deleted');
     }
 }

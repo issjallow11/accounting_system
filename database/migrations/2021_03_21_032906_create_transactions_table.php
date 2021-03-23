@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->string('Receipt_no');
+            $table->string('receipt_no');
             $table->string('customer_name');
             $table->double('payment');
             $table->date('payment_date');

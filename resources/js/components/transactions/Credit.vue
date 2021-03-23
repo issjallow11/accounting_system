@@ -7,7 +7,7 @@
 
             <div class="card" v-if="$gate.isAdmin()">
               <div class="card-header">
-                <h3 class="card-title">Sub Accounts List</h3>
+                <h3 class="card-title">Crdits List</h3>
 
                 <div class="card-tools">
 
@@ -23,27 +23,34 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Name</th>
-                      <th>Account Type</th>
+                      <th>Date</th>
+                      <th>Reciept No</th>
+                      <th>Customer Name</th>
+                      <th>Payment</th>
+                      <th>Payment Date</th>
                       <th>Created At</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                     <tr v-for="subAccount in subAccounts.data" :key="subAccount.id">
+                     <tr v-for="credit in credits.data" :key="credit.id">
 
-                      <td>{{subAccount.id}}</td>
-                      <td class="text-capitalize">{{subAccount.name}}</td>
-                      <td>{{subAccount.type}}</td>
-                      <td>{{subAccount.created_at}}</td>
+                      <td>{{credit.id}}</td>
+                      <td class="text-capitalize">{{credit.date}}</td>
+                      <td class="text-capitalize">{{credit.receipt_no}}</td>
+                      <td>{{credit.customer_name}}</td>
+                      <td>{{credit.payment}}</td>
+                      <td>{{credit.payment_date}}</td>
+                      <!-- <td :inner-html.prop="user.email_verified_at | yesno"></td> -->
+                      <td>{{credit.created_at}}</td>
 
                       <td>
 
-                        <a href="#" @click="editModal(user)">
+                        <a href="#" @click="editModal(credit)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteSubAccount(subAccount.id)">
+                        <a href="#" @click="deleteCredit(credit.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
                       </td>
@@ -53,7 +60,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="subAccounts" @pagination-change-page="getResults"></pagination>
+                  <pagination :data="credits" @pagination-change-page="getResults"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -70,8 +77,8 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode">Create New SubAccount</h5>
-                    <h5 class="modal-title" v-show="editmode">Update SubAccounts's Info</h5>
+                    <h5 class="modal-title" v-show="!editmode">Create New User</h5>
+                    <h5 class="modal-title" v-show="editmode">Update User's Info</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,23 +86,38 @@
 
                 <!-- <form @submit.prevent="createUser"> -->
 
-                <form @submit.prevent="editmode ? updateSubAccount() : createSubAccount()">
+                <form @submit.prevent="editmode ? updateUser() : credit()">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input v-model="form.name" type="text" name="name"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
+                            <label>date</label>
+                            <input v-model="form.date" type="date" name="date"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('date') }">
+                            <has-error :form="form" field="date"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <label>Receipt No:</label>
+                            <input v-model="form.receipt_no" type="text" name="receipt_no"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('receipt_no') }">
+                            <has-error :form="form" field="receipt_no"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Account Type</label>
-                            <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                                <option value="">Select Account Type</option>
-                                <option value="inward_payment">Inward Payment</option>
-                                <option value="outward_payment">Outward Payment</option>
-                            </select>
-                            <has-error :form="form" field="type"></has-error>
+                            <label>Customer Name</label>
+                            <input v-model="form.customer_name" type="customer_name" name="customer_name"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('customer_name') }">
+                            <has-error :form="form" field="customer_name"></has-error>
+                        </div>
+                       <div class="form-group">
+                            <label>Payment</label>
+                            <input v-model="form.payment" type="number" name="payment"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('payment') }">
+                            <has-error :form="form" field="payment"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Date</label>
+                            <input v-model="form.payment_date" type="date" name="payment_date"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('payment_date') }">
+                            <has-error :form="form" field="payment_date"></has-error>
                         </div>
 
 
@@ -103,7 +125,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                        <button v-show="!editmode" type="submit" class="btn btn-primary">Credit Cash Book</button>
                     </div>
                   </form>
                 </div>
@@ -118,31 +140,31 @@
         data () {
             return {
                 editmode: false,
-                subAccounts: {},
-                accounts : {},
+                credits : {},
                 form: new Form({
                     id : '',
-                    name: '',
-                    type: '',
-
+                    date : '',
+                    receipt_no: '',
+                    customer_name: '',
+                    payment: '',
+                    payment_date: '',
                 })
             }
         },
-
         methods: {
 
             getResults(page = 1) {
 
                   this.$Progress.start();
 
-                  axios.get('api/account?page=' + page)
-                  .then(({ data }) => (this.subAccounts = data.data));
+                  axios.get('api/credit?page=' + page).then(({ data }) => (this.credits = data.data));
+
                   this.$Progress.finish();
             },
-            updateSubAccount(){
+            updateUser(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('api/subAccount/'+this.form.id)
+                this.form.put('api/credit/'+this.form.id)
                 .then((response) => {
                     // success
                     $('#addNew').modal('hide');
@@ -153,7 +175,7 @@
                     this.$Progress.finish();
                         //  Fire.$emit('AfterCreate');
 
-                    this.loadSubAccount();
+                    this.loadCredits();
                 })
                 .catch(() => {
                     this.$Progress.fail();
@@ -171,7 +193,7 @@
                 this.form.reset();
                 $('#addNew').modal('show');
             },
-            deleteSubAccount(id){
+            deleteCredit(id){
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -183,38 +205,33 @@
 
                         // Send request to the server
                          if (result.value) {
-                                this.form.delete('api/subAccount/'+id).then(()=>{
+                                this.form.delete('api/credit/'+id).then(()=>{
                                         Swal.fire(
                                         'Deleted!',
-                                        'Account has been deleted.',
+                                        'Your file has been deleted.',
                                         'success'
                                         );
                                     // Fire.$emit('AfterCreate');
-                                    this.loadSubAccount();
+                                    this.loadCredits();
                                 }).catch((data)=> {
                                   Swal.fire("Failed!", data.message, "warning");
                               });
                          }
                     })
             },
-            // loadAccounts(){
-            //       axios.get('api/account').then(({data})=>
-            //     (this.accounts = data.data))
-            // },
-          loadSubAccount(){
+          loadCredits(){
             this.$Progress.start();
 
             if(this.$gate.isAdmin()){
-              axios.get("api/subAccount").then(({ data }) => (this.subAccounts = data));
-
+              axios.get("api/credit").then(({ data }) => (this.credits = data.data));
             }
 
             this.$Progress.finish();
           },
 
-          createSubAccount(){
+          credit(){
 
-              this.form.post('api/subAccount')
+              this.form.post('api/credit')
               .then((response)=>{
                   $('#addNew').modal('hide');
 
@@ -224,7 +241,7 @@
                   });
 
                   this.$Progress.finish();
-                  this.loadSubAccount();
+                  this.loadCredits();
 
               })
               .catch(()=>{
@@ -238,12 +255,12 @@
 
         },
         mounted() {
-            console.log('Sub Account Component mounted.')
+            console.log('User Component mounted.')
         },
         created() {
 
             this.$Progress.start();
-            this.loadSubAccount();
+            this.loadCredits();
             this.$Progress.finish();
         }
     }

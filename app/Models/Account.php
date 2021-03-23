@@ -12,4 +12,10 @@ class Account extends Model
         'name',
         'amount',
     ];
+    public function SubAccount(){
+        return $this->hasMany(SubAccount::class);
+    }
+    public function Transactions(){
+        return $this->hasMany(Transactions::class);
+    }
 }

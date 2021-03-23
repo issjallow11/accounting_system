@@ -17,13 +17,35 @@
           </p>
         </router-link>
       </li> --}}
-      <li class="nav-item">
-        <router-link to="/transactions" class="nav-link">
-          <i class="nav-icon fas fa-list orange"></i>
+      <li class="nav-item has-treeview">
+        <a href="#" class="nav-link">
+          <i class="nav-icon fas fa-cog green"></i>
           <p>
             Transactions
+            <i class="right fas fa-angle-left"></i>
           </p>
-        </router-link>
+        </a>
+        <ul class="nav nav-treeview">
+
+
+          <li class="nav-item">
+            <router-link to="/debitAccount" class="nav-link">
+              <i class="nav-icon fas fa-tags green"></i>
+              <p>
+                Debit
+              </p>
+            </router-link>
+          </li>
+
+            <li class="nav-item">
+              <router-link to="/creditAccount" class="nav-link">
+                  <i class="nav-icon fas fa-cogs white"></i>
+                  <p>
+                      Credit
+                  </p>
+              </router-link>
+            </li>
+        </ul>
       </li>
       {{-- <li class="nav-item">
         <router-link to="/accounts" class="nav-link">
@@ -43,14 +65,7 @@
         </a>
         <ul class="nav nav-treeview">
 
-          {{-- <li class="nav-item">
-            <router-link to="/product/category" class="nav-link">
-              <i class="nav-icon fas fa-list-ol green"></i>
-              <p>
-                Chart of Account
-              </p>
-            </router-link>
-          </li> --}}
+
           <li class="nav-item">
             <router-link to="/accounts" class="nav-link">
               <i class="nav-icon fas fa-tags green"></i>

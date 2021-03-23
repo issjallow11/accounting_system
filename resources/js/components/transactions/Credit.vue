@@ -89,6 +89,17 @@
                 <form @submit.prevent="editmode ? updateUser() : credit()">
                     <div class="modal-body">
                         <div class="form-group">
+
+                            <label>Account Type</label>
+                            <select class="form-control" v-model="form.account_type">
+                              <option
+                                  v-for="(cat,index) in subAccounts.data" :key="index"
+                                  :value="index"
+                                  :selected="index == form.account_type">{{ cat.name }}</option>
+                            </select>
+                            <has-error :form="form" field="account_type"></has-error>
+                        </div>
+                        <div class="form-group">
                             <label>date</label>
                             <input v-model="form.date" type="date" name="date"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('date') }">
@@ -141,8 +152,10 @@
             return {
                 editmode: false,
                 credits : {},
+                subAccounts:[],
                 form: new Form({
                     id : '',
+                    account_type:'',
                     date : '',
                     receipt_no: '',
                     customer_name: '',
@@ -226,8 +239,16 @@
               axios.get("api/credit").then(({ data }) => (this.credits = data.data));
             }
 
+
             this.$Progress.finish();
           },
+            loadSubAccounts(){
+                axios.get("api/subAccountCredits").then(({ data }) => (this.subAccounts = data.data));
+
+            },
+        //   loadAccounts(){
+        //       axios.get("/api/subAccount").then(({ data }) => (this.accounts = data));
+        //   },
 
           credit(){
 
@@ -261,6 +282,7 @@
 
             this.$Progress.start();
             this.loadCredits();
+            this.loadSubAccounts();
             this.$Progress.finish();
         }
     }

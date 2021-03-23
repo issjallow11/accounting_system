@@ -33,6 +33,9 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('tag/list', 'TagController@list');
     Route::get('category/list', 'CategoryController@list');
     Route::post('product/upload', 'ProductController@upload');
+    Route::post('creditCashBook','TaskController@credit');
+    Route::get('subAccountCredits', 'SubAccountController@Credits');
+
 
     Route::apiResources([
         'user' => 'UserController',
@@ -41,7 +44,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'tag' => 'TagController',
         'account' => 'AccountController',
         'subAccount' => 'SubAccountController',
-        'credit' => 'TransactionController',
+        'credit' => 'CreditController',
 
     ]);
 });

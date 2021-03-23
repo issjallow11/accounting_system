@@ -16,6 +16,6 @@ class Account extends Model
         return $this->hasMany(SubAccount::class);
     }
     public function Transactions(){
-        return $this->hasMany(Transactions::class);
+        return $this->hasMany(Credit::class);
     }
 }

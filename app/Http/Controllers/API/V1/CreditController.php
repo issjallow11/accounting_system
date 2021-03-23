@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaction;
+use App\Models\Credit;
 use App\Models\Account;
 use Illuminate\Http\Request;
 
-class TransactionController extends BaseController
+class CreditController extends BaseController
 {
     public function __construct()
     {
@@ -25,11 +25,10 @@ class TransactionController extends BaseController
         }
         // $this->authorize('isAdmin');
 
-        $credits = Transaction::latest()->paginate(10);
+        $credits = Credit::latest()->paginate(10);
 
         return $this->sendResponse($credits, 'Transaction list');
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +38,7 @@ class TransactionController extends BaseController
      */
     public function store(Request $request)
     {
-        $credit = Transaction::create([
+        $credit = Credit::create([
             'date' => $request['date'],
             'receipt_no' => $request['receipt_no'],
             'customer_name' => $request['customer_name'],
@@ -49,8 +48,6 @@ class TransactionController extends BaseController
         ]);
         $accountUpdate = Account::find(1);
         $accountUpdate->update(['amount'=>$accountUpdate->amount + $credit->payment]);
-
-
         return $this->sendResponse($credit, 'Account Credited Successfully');
     }
 

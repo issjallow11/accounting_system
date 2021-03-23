@@ -7,7 +7,7 @@ use App\Models\SubAccount;
 
 use Illuminate\Http\Request;
 
-class SubAccountController extends Controller
+class SubAccountController extends BaseController
 {
     public function __construct()
     {
@@ -25,8 +25,12 @@ class SubAccountController extends Controller
         }
         // $this->authorize('isAdmin');
         $subAccounts = SubAccount::latest()->paginate(10);
-        return $subAccounts;
+        return $this->sendResponse($subAccounts, 'Sub Accounts  list');
     }
+    public function Credits(){
+        // $subAccounts = SubAccount::where('type','inward_payment')->orderBy('name')->paginate(10)->get();
+        $subAccounts = SubAccount::where('type','inward_payment')->latest()->paginate(10);
+        return $this->sendResponse($subAccounts, 'Sub Accounts  list');    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,10 +46,8 @@ class SubAccountController extends Controller
 
         ]);
 
-        // return $this->sendResponse($amount, 'User Created Successfully');
-        return response()->json([
-            'message' => 'account added successfully'
-        ]);
+        return $this->sendResponse($account, 'Sub Account Created Successfully');
+
     }
 
     /**
@@ -86,6 +88,6 @@ class SubAccountController extends Controller
 
         $subAccount->delete();
 
-        return $subAccount;
+        return $this->sendResponse([$subAccount], 'Sub Account has been Deleted');
     }
 }

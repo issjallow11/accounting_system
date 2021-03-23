@@ -205,7 +205,7 @@
             this.$Progress.start();
 
             if(this.$gate.isAdmin()){
-              axios.get("api/subAccount").then(({ data }) => (this.subAccounts = data));
+              axios.get("api/subAccount").then(({ data }) => (this.subAccounts = data.data));
 
             }
 

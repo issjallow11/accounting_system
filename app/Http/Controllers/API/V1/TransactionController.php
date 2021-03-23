@@ -47,12 +47,9 @@ class TransactionController extends BaseController
             'payment_date' => $request['payment_date'],
 
         ]);
-        // $payment = Transaction:: find('payment');
-        // $account = Account::find('amount');
-        // $amount = $account->amount + $payment;
-        $accountUpdate = Account::find($id)->amount;
-        dd($accountUpdate);
-        $accountUpdate->amount = $accountUpdate->$amount + $credit->payment;
+        $accountUpdate = Account::find(1);
+        $accountUpdate->update(['amount'=>$accountUpdate->amount + $credit->payment]);
+
 
         return $this->sendResponse($credit, 'Account Credited Successfully');
     }

@@ -35,6 +35,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::post('product/upload', 'ProductController@upload');
     Route::post('creditCashBook','TaskController@credit');
     Route::get('subAccountCredits', 'SubAccountController@Credits');
+    Route::get('subAccountDebits','SubAccountController@Debits');
 
 
     Route::apiResources([
@@ -45,6 +46,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'account' => 'AccountController',
         'subAccount' => 'SubAccountController',
         'credit' => 'CreditController',
+        'debit' => 'DebitController',
 
     ]);
 });

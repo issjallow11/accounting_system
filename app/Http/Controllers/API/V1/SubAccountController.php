@@ -30,7 +30,13 @@ class SubAccountController extends BaseController
     public function Credits(){
         // $subAccounts = SubAccount::where('type','inward_payment')->orderBy('name')->paginate(10)->get();
         $subAccounts = SubAccount::where('type','inward_payment')->latest()->paginate(10);
-        return $this->sendResponse($subAccounts, 'Sub Accounts  list');    }
+        return $this->sendResponse($subAccounts, 'Sub Accounts  list');
+    }
+    public function Debits(){
+        $subAccounts = SubAccount::where('type','outward_payment')->latest()->paginate(10);
+        return $this->sendResponse($subAccounts, 'Sub Accounts  list');
+
+    }
 
     /**
      * Store a newly created resource in storage.

@@ -39,6 +39,7 @@ class CreditController extends BaseController
     public function store(Request $request)
     {
         $credit = Credit::create([
+            'account_type' => $request['account_type'],
             'date' => $request['date'],
             'receipt_no' => $request['receipt_no'],
             'customer_name' => $request['customer_name'],

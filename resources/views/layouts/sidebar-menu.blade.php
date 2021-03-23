@@ -47,14 +47,7 @@
             </li>
         </ul>
       </li>
-      {{-- <li class="nav-item">
-        <router-link to="/accounts" class="nav-link">
-          <i class="nav-icon fas fa-list orange"></i>
-          <p>
-            Accounts
-          </p>
-        </router-link>
-      </li> --}}
+
       <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-cog green"></i>
@@ -96,7 +89,7 @@
       @endcan
 
 
-
+{{-- 
        @can('isAdmin')
       <li class="nav-item has-treeview">
         <a href="#" class="nav-link">
@@ -136,7 +129,7 @@
         </ul>
       </li>
 
-      @endcan
+      @endcan --}}
 
 
 
